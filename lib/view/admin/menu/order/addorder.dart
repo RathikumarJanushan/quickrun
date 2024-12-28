@@ -88,6 +88,18 @@ class _AddOrderState extends State<AddOrder> {
     }
   }
 
+  Future<void> updateParcelAddress(String parcelId, String newAddress) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('pending_add_order')
+          .doc(parcelId)
+          .update({'address': newAddress});
+      print('Address updated successfully.');
+    } catch (e) {
+      print('Error updating address: $e');
+    }
+  }
+
   Future<void> fetchParcelData() async {
     try {
       final snapshot = await FirebaseFirestore.instance
@@ -243,6 +255,8 @@ class _AddOrderState extends State<AddOrder> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     ...selectedParcelDetails.map((parcel) {
+                      final TextEditingController addressController =
+                          TextEditingController(text: parcel['address']);
                       return Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Column(
@@ -256,9 +270,43 @@ class _AddOrderState extends State<AddOrder> {
                               'Mobile Number: ${parcel['mobile_number']}',
                               style: const TextStyle(fontSize: 16),
                             ),
-                            Text(
-                              'Address: ${parcel['address']}',
-                              style: const TextStyle(fontSize: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Address: ',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: addressController,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final newAddress = addressController.text;
+                                    if (newAddress.isNotEmpty) {
+                                      // Update the address locally
+                                      setState(() {
+                                        parcel['address'] = newAddress;
+                                      });
+
+                                      // Update the address in Firestore
+                                      await updateParcelAddress(
+                                          parcel['id'], newAddress);
+                                    }
+                                  },
+                                  child: const Text('Update'),
+                                ),
+                              ],
                             ),
                             Text(
                               'Postal Code: ${parcel['postal_code']}',

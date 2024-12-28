@@ -17,12 +17,12 @@ samples, guidance on mobile development, and a full API reference.
 
 
 
-flutter build web --base-href /quickrun_admin/ --release
+flutter build web --base-href /quickrun/ --release
 cd build/web
 git init
 git add README.md
 git add .
-git commit -m "Deploy 16"    
+git commit -m "Deploy 5"    
 git branch -M main
-git remote add origin https://github.com/RathikumarJanushan/quickrun_admin.git
+git remote add origin https://github.com/RathikumarJanushan/quickrun.git
 git push -u origin janu

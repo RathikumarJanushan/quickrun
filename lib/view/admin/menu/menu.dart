@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:quickrun/auth/auth_service.dart';
-import 'package:quickrun/view/admin/Delete_month.dart';
-import 'package:quickrun/view/admin/addTime.dart';
+
 import 'package:quickrun/view/admin/addorder/AddOrderPage.dart';
 import 'package:quickrun/view/admin/deletuser.dart';
 
-import 'package:quickrun/view/admin/availableUser/availableUser.dart';
-import 'package:quickrun/view/admin/google/map.dart';
-import 'package:quickrun/view/admin/kmReport/SelectFiltersPage.dart';
-import 'package:quickrun/view/admin/kmReport/finish_order_view.dart';
+import 'package:quickrun/view/admin/kmReport/FinishedOrderPage.dart';
+import 'package:quickrun/view/admin/kmReport/OrderDetailsPage.dart';
 import 'package:quickrun/view/admin/menu/add_hotel.dart';
 import 'package:quickrun/view/admin/menu/order/LiveOrderDetailsPage.dart';
 
-import 'package:quickrun/view/admin/report.dart';
-import 'package:quickrun/view/admin/report2.dart';
 import 'package:quickrun/view/admin/userkmReport/UserKm.dart';
 import 'package:quickrun/view/wellcomeview/welcome_view.dart';
 
@@ -135,7 +130,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SelectFiltersPage()),
+                MaterialPageRoute(builder: (context) => FinishedOrderPage()),
               );
             },
           ),
@@ -144,7 +139,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserKm()),
+                MaterialPageRoute(builder: (context) => userkm()),
               );
             },
           ),

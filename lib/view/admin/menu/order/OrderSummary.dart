@@ -28,11 +28,70 @@ class SummaryPage extends StatelessWidget {
 
       // Save to the live_order_details collection
       await firestore.collection('live_order_details').add(orderData);
+      print("Order saved to live_order_details collection");
+
+      // Deleting selected parcels from pending_add_order collection
+      if (parcelDetails.isNotEmpty) {
+        WriteBatch batch = firestore.batch();
+        for (var parcel in parcelDetails) {
+          // Check if parcel name exists and is not empty
+          if (parcel['name'] != null && parcel['name'].isNotEmpty) {
+            print("Deleting parcel with name: ${parcel['name']}");
+
+            // Query the pending_add_order collection by name
+            var parcelQuerySnapshot = await firestore
+                .collection('pending_add_order')
+                .where('name', isEqualTo: parcel['name'])
+                .get();
+
+            // Check if the query returns any matching documents
+            if (parcelQuerySnapshot.docs.isNotEmpty) {
+              // Get the first document (in case there are multiple with the same name)
+              var docRef = parcelQuerySnapshot.docs.first.reference;
+              batch.delete(docRef);
+            } else {
+              print("No parcel found with the name: ${parcel['name']}");
+            }
+          } else {
+            print("Parcel name is missing or invalid for: ${parcel['name']}");
+          }
+        }
+
+        // Commit the batch for deleting parcels
+        await batch.commit();
+        print(
+            "Batch commit successful, parcels deleted from pending_add_order");
+      } else {
+        print("No parcels to delete.");
+      }
+
+      // Update the availability status to "busy"
+      await firestore.collection('available').doc(userId).update({
+        'available': 'busy', // Assuming the field name is 'status'
+      });
+      print("User availability updated to 'busy'");
+
+      // Save update to the updates collection with userId as the document ID
+      Map<String, dynamic> updateData = {
+        'body': 'new order',
+        'timestamp': FieldValue.serverTimestamp(),
+        'title': 'open app and check',
+        'userid': userId,
+      };
+
+      await firestore.collection('updates').doc(userId).set(updateData);
+      print(
+          "Update saved to updates collection with userId as the document ID");
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Order saved successfully!')),
+        const SnackBar(
+            content: Text(
+                'Order saved, parcels removed, availability updated to busy, and update added!')),
       );
+
+      // Navigate to /adminhome
+      Navigator.pushReplacementNamed(context, '/adminhome');
     } catch (e) {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
