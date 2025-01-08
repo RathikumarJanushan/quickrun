@@ -7714,6 +7714,9 @@ google_maps_flutter
 google_maps_flutter_android
 google_maps_flutter_ios
 google_maps_flutter_platform_interface
+path_provider
+path_provider_android
+path_provider_foundation
 path_provider_linux
 path_provider_platform_interface
 path_provider_windows
