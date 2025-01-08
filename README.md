@@ -22,7 +22,7 @@ cd build/web
 git init
 git add README.md
 git add .
-git commit -m "Deploy 5"    
+git commit -m "Deploy 8"    
 git branch -M main
 git remote add origin https://github.com/RathikumarJanushan/quickrun.git
 git push -u origin janu

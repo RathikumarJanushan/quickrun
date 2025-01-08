@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OrderDetails extends StatelessWidget {
+class OFullDetails extends StatelessWidget {
   final String orderId;
   final Map<String, dynamic> orderData;
 
-  const OrderDetails({
+  const OFullDetails({
     Key? key,
     required this.orderId,
     required this.orderData,
@@ -19,7 +18,7 @@ class OrderDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Detail: $orderId'),
+        title: Text('Order Details: $orderId'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
